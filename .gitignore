@@ -1,0 +1,30 @@
+# IDE
+.idea/
+.vscode/
+.vs/
+*.user
+*.suo
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+
+# C, C++ and C# build artifacts
+bin/
+obj/
+build/
+cmake-build-*/
+*.o
+*.obj
+*.exe
+*.dll
+*.pdb
+
+# Web and operating-system artifacts
+node_modules/
+dist/
+.DS_Store
+Thumbs.db
