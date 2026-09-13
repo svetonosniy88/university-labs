@@ -17,6 +17,7 @@ bin/
 obj/
 build/
 cmake-build-*/
+x64/
 *.o
 *.obj
 *.exe
