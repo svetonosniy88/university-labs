@@ -158,6 +158,34 @@ void task1(ptrNODE head)
     }
 }
 
+bool task3(ptrNODE& head)
+{
+    bool result{};
+    while (head && head->info % 2 != 0)
+    {
+        del_from_head(head);
+        result = true;
+    }
+    if (head)
+    {
+        ptrNODE ptr{ head };
+        while (ptr->next)
+        {
+            if (ptr->next->info % 2 != 0)
+            {
+                del_after(ptr);
+                result = true;
+            }
+            else
+            {
+                ptr = ptr->next;
+                result = false;
+            }
+        }
+    }
+    return result;
+}
+
 int main()
 {
     std::ifstream file("data.txt");
@@ -170,12 +198,7 @@ int main()
     ptrNODE head{};
     create_by_stack(head, file);
 
-    std::cout << "List: ";
-    print(head);
 
-    task1(head);
-    std::cout << "After duplicating odd elements: ";
-    print(head);
 
     clear(head);
     return 0;
