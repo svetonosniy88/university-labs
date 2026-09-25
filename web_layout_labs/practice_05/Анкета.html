@@ -1,0 +1,54 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+    "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="ru">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Анкета туриста</title>
+</head>
+<body background="../practice_04/Фон.gif" bgcolor="#f2f2dc" text="#183d28" link="#0000cc" vlink="#551a8b" leftmargin="18" topmargin="12">
+    <h1><font face="Arial">Анкета участника похода</font></h1>
+    <p>Учебная форма для практической работы. Ответы не сохраняются. Парольное поле дано только для показа элемента.</p>
+    <form action="#" method="get">
+        <h2>О себе</h2>
+        <p>Имя: <input type="text" name="name" value="Участник похода" size="35" maxlength="50"></p>
+        <p>Пароль: <input type="password" size="20" maxlength="20"></p>
+        <p>Опыт походов:</p>
+        <p><input type="radio" name="experience" value="new" checked> Начинающий<br>
+           <input type="radio" name="experience" value="some"> Уже ходил в походы</p>
+
+        <h2>Интересы</h2>
+        <p><input type="checkbox" name="interest" value="routes"> Маршруты<br>
+           <input type="checkbox" name="interest" value="equipment"> Снаряжение<br>
+           <input type="checkbox" name="interest" value="nature"> Природа</p>
+        <p>Предпочитаемый маршрут:<br>
+            <select name="route" size="1">
+                <option value="forest" selected>Лесная тропа</option>
+                <option value="lake">Берег озера</option>
+                <option value="mountain">Горы</option>
+            </select>
+        </p>
+        <p>Что проверить перед походом? Можно выбрать несколько пунктов:<br>
+            <select name="checklist" size="4" multiple>
+                <option value="weather" selected>Погода</option>
+                <option value="water">Запас воды</option>
+                <option value="equipment">Снаряжение</option>
+                <option value="return">Время возвращения</option>
+            </select>
+        </p>
+        <p>Пожелания к маршруту:<br>
+            <textarea name="comment" rows="4" cols="45">Умеренный темп и остановки для отдыха.</textarea>
+        </p>
+        <p>Файл с планом похода: <input type="file" name="plan"></p>
+        <input type="hidden" name="form" value="учебная анкета">
+        <p>
+            <input type="submit" value="Отправить форму">
+            <input type="reset" value="Очистить форму">
+            <input type="button" value="Обычная кнопка">
+        </p>
+        <p>Кнопка-изображение:</p>
+        <p><input type="image" src="Прямоугольник.gif" alt="Отправить форму нажатием на изображение" width="200" height="120"></p>
+    </form>
+    <p><a href="Карта предыдущих работ.html">Открыть карту со ссылками на упражнения 1–4</a>.</p>
+    <p><a href="Упражнение 15.html">Открыть отдельное упражнение 15</a>.</p>
+</body>
+</html>

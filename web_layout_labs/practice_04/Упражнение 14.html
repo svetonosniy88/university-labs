@@ -1,0 +1,35 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+    "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="ru">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Упражнение 14 — списки выбора</title>
+</head>
+<body background="Фон.gif" bgcolor="#f2f2dc" text="#183d28" link="#0000cc" vlink="#551a8b" leftmargin="18" topmargin="12">
+    <h1><font face="Arial">Упражнение 14. Списки выбора</font></h1>
+    <form>
+        <table border="1" cellpadding="10" cellspacing="0" bgcolor="#f7f6ec">
+            <caption><b>Выберите вариант</b></caption>
+            <tr><td valign="top">
+                Один вариант:<br>
+                <select name="difficulty" size="1">
+                    <option value="easy" selected>Начальный</option>
+                    <option value="medium">Средний</option>
+                    <option value="hard">Сложный</option>
+                </select>
+            </td><td valign="top">
+                Можно выбрать несколько:<br>
+                <select name="topics" size="4" multiple>
+                    <option value="weather" selected>Погода</option>
+                    <option value="water">Вода</option>
+                    <option value="equipment">Снаряжение</option>
+                    <option value="return">Время возвращения</option>
+                </select>
+            </td></tr>
+        </table>
+        <p><input type="submit" value="Показать выбор">
+           <input type="reset" value="Сбросить"></p>
+    </form>
+    <p><a href="index.html">Вернуться к сайту</a></p>
+</body>
+</html>
