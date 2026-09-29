@@ -1,205 +1,93 @@
-#include <fstream>
-#include <functional>
-#include <iostream>
+#include "list.h"
 
-using TInfo = int;
+#include <exception>
+#include <stdexcept>
 
-struct NODE
+
+bool task15(ptrNODE& head)
 {
-    TInfo info;
-    NODE* next;
-
-    NODE(TInfo info, NODE* ptr) : info(info), next(ptr) {}
-
-    ~NODE()
-    {
-        next = nullptr;
-    }
-};
-
-using ptrNODE = NODE*;
-
-void init(ptrNODE& head)
-{
-    head = nullptr;
-}
-
-bool empty(ptrNODE head)
-{
-    return head == nullptr;
-}
-
-void add_by_pointer(ptrNODE& ptr, TInfo elem)
-{
-    ptr = new NODE(elem, ptr);
-}
-
-void add_to_head(ptrNODE& head, TInfo elem)
-{
-    add_by_pointer(head, elem);
-}
-
-void add_after(ptrNODE& ptr, TInfo elem)
-{
-    if (ptr != nullptr)
-        add_by_pointer(ptr->next, elem);
-}
-
-void del_by_pointer(ptrNODE& ptr)
-{
-    if (ptr != nullptr)
-    {
-        ptrNODE tmp{ptr};
-        ptr = tmp->next;
-        delete tmp;
-    }
-}
-
-void del_from_head(ptrNODE& head)
-{
-    del_by_pointer(head);
-}
-
-void del_after(ptrNODE& ptr)
-{
-    if (ptr != nullptr)
-        del_by_pointer(ptr->next);
-}
-
-void print(ptrNODE head, std::ostream& stream = std::cout)
-{
-    if (empty(head))
-        stream << "empty";
-    else
-    {
-        ptrNODE ptr{head};
-        while (ptr)
-        {
-            stream << ptr->info << ' ';
-            ptr = ptr->next;
-        }
-    }
-    stream << '\n';
-}
-
-void clear(ptrNODE& head)
-{
-    while (head)
-        del_from_head(head);
-}
-
-void create_by_stack(ptrNODE& head, std::ifstream& file)
-{
-    init(head);
-    TInfo elem{};
-    while (file >> elem)
-        add_to_head(head, elem);
-}
-
-void create_by_queue(ptrNODE& head, std::ifstream& file)
-{
-    init(head);
-    TInfo elem{};
-
-    if (!(file >> elem))
-        return;
-
-    add_to_head(head, elem);
-    ptrNODE tail{head};
-    while (file >> elem)
-    {
-        add_after(tail, elem);
-        tail = tail->next;
-    }
-}
-
-ptrNODE create_by_order(std::ifstream& file)
-{
-    ptrNODE head{};
-    init(head);
-    TInfo elem{};
-
-    if (!(file >> elem))
-        return head;
-
-    add_to_head(head, elem);
-    std::function<ptrNODE(TInfo)> find_place = [&head](TInfo elem)
-    {
-        ptrNODE ptr{head};
-        while (ptr->next && ptr->next->info < elem)
-            ptr = ptr->next;
-        return ptr;
-    };
-
-    while (file >> elem)
-    {
-        if (elem < head->info)
-            add_to_head(head, elem);
-        else
-        {
-            ptrNODE ptr{find_place(elem)};
-            add_after(ptr, elem);
-        }
-    }
-    return head;
-}
-
-void task1(ptrNODE head)
-{
+    ptrNODE prev{nullptr};
     ptrNODE ptr{head};
-    while (ptr)
+    //Ищем первый нечетный
+    while (ptr && ptr->info % 2 == 0)
     {
-        if (ptr->info % 2 != 0)
-        {
-            add_after(ptr, ptr->info);
-            ptr = ptr->next;
-        }
+        prev = ptr;
         ptr = ptr->next;
     }
-}
+    
+    bool found{ptr != nullptr};
+    
+    if (found)
+    {
+        //Проходим по группе нечетных
+        ptrNODE first{ptr};
+        while (ptr->next && ptr->next->info % 2 != 0)
+            ptr = ptr->next;
 
-bool task3(ptrNODE& head)
-{
-    bool result{};
-    while (head && head->info % 2 != 0)
-    {
-        del_from_head(head);
-        result = true;
-    }
-    if (head)
-    {
-        ptrNODE ptr{ head };
-        while (ptr->next)
+        ptrNODE last{ptr};
+        ptrNODE after{last->next};
+
+        //Выполняем по необходиомсти перенос группы в конец списка
+        if (after != nullptr) //если сразу после группы нуллптр то перенос не требуется
         {
-            if (ptr->next->info % 2 != 0)
-            {
-                del_after(ptr);
-                result = true;
-            }
+            //Отсоединение группы от основного списка
+            if (prev != nullptr)
+                prev->next = after;
             else
-            {
-                ptr = ptr->next;
-                result = false;
-            }
+                head = after;
+            last->next = nullptr;
+
+            //Проход по списку до конца и привязка отвязанной группы нечётных
+            ptrNODE tail{after};
+            while (tail->next)
+                tail = tail->next;
+            tail->next = first;
         }
     }
-    return result;
+
+    return found;
 }
 
 int main()
 {
-    std::ifstream file("data.txt");
-    if (!file)
+    ptrNODE head{};
+    int result{0};
+
+    try
     {
-        std::cout << "File error\n";
-        return 1;
+        std::ifstream input("input.txt");
+        if (!input)
+            throw std::runtime_error("Cannot open input.txt in the working directory.");
+
+        head = create_by_order(input);
+        std::cout << "Sorted list: ";
+        print(head);
+
+        bool found{task15(head)};
+        std::ofstream output("output.txt");
+        if (!output)
+            throw std::runtime_error("Cannot open output.txt for writing.");
+
+        print(head, output);
+        if (!found)
+            output << "No odd numbers in the list.\n";
+
+        output.close();
+        if (!output)
+            throw std::runtime_error("Failed to write output.txt.");
+
+        std::cout << "Result: ";
+        print(head);
+        if (!found)
+            std::cout << "No odd numbers in the list.\n";
+        std::cout << "Result saved to output.txt.\n";
+    }
+    catch (const std::exception& error)
+    {
+        std::cerr << "Error: " << error.what() << '\n';
+        result = 1;
     }
 
-    ptrNODE head{};
-    create_by_stack(head, file);
-
-
-
     clear(head);
-    return 0;
+    return result;
 }

@@ -23,6 +23,7 @@ x64/
 *.exe
 *.dll
 *.pdb
+cpp_dsa_labs/lab_01/output.txt
 
 # Web and operating-system artifacts
 node_modules/

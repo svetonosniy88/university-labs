@@ -11,7 +11,7 @@ namespace lab_01
             MouseClick += Form1_MouseClick;
         }
 
-        private void Form1_MouseClick(object? sender, MouseEventArgs e)
+        private void Form1_MouseClick(object sender, MouseEventArgs e)
         {
             Text = $"Координаты мыши: X = {e.Location.X}, Y = {e.Location.Y}";
         }
