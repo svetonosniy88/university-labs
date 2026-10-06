@@ -2,5 +2,8 @@
   <Configurations>
     <Platform Name="x64" />
   </Configurations>
+  <Folder Name="/Элементы решения/">
+    <File Path="output.txt" />
+  </Folder>
   <Project Path="lab_01.vcxproj" Id="2e7fcf64-bc91-4d18-ae16-e28dad759711" />
 </Solution>

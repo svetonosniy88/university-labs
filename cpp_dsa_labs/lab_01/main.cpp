@@ -4,73 +4,47 @@
 #include <stdexcept>
 
 
-bool task15(ptrNODE& head)
+bool find(ptrNODE head, ptrNODE& before, ptrNODE& last)
 {
-    ptrNODE prev{ nullptr };
-    ptrNODE ptr{ head };
+    before = nullptr;
+    last = nullptr;
+    ptrNODE ptr{head};
+    bool found{false};
 
-    bool found{ false };
-
-    // Ищем начало первой группы как минимум из двух нечётных элементов
-    while (ptr != nullptr && !found)
+    while (ptr->next && !found)
     {
-        // Пропускаем чётные элементы
-        while (ptr != nullptr && ptr->info % 2 == 0)
+        ptrNODE first{ptr->next};
+        if (first->info % 2 != 0 && 
+            first->next != nullptr && 
+            first->next->info % 2 != 0)
         {
-            prev = ptr;
-            ptr = ptr->next;
+            before = ptr;
+            last = first->next;
+            while (last->next != nullptr && last->next->info % 2 != 0)
+                last = last->next;
+            found = true;
         }
-
-        // Если группа нашлась до конца списка
-        if (ptr != nullptr)
-        {
-            // Группа существует только если следующий элемент тоже нечётный
-            if (ptr->next != nullptr && ptr->next->info % 2 != 0)
-            {
-                found = true;
-            }
-            else
-            {
-                // Текущий нечётный элемент одиночный — пропускаем его
-                prev = ptr;
-                ptr = ptr->next;
-            }
-        }
+        else
+            ptr = first;
     }
 
-    if (found)
+    return found;
+}
+
+bool task15(ptrNODE head)
+{
+    ptrNODE before{};
+    ptrNODE last{};
+    bool found{find(head, before, last)};
+
+    if (found && last->next)
     {
-        // ptr указывает на первый элемент найденной нечётной группы
-        ptrNODE first{ ptr };
+        ptrNODE tail{ last };
+        while (tail->next)
+            tail = tail->next;
 
-        // Ищем последний элемент группы
-        while (ptr->next != nullptr && ptr->next->info % 2 != 0)
-            ptr = ptr->next;
-
-        ptrNODE last{ ptr };
-        ptrNODE after{ last->next };
-
-        // Переносим группу, если она ещё не находится в конце списка
-        if (after != nullptr)
-        {
-            // Отсоединяем группу
-            if (prev != nullptr)
-                prev->next = after;
-            else
-                head = after;
-
-            last->next = nullptr;
-
-            // Ищем конец оставшегося списка
-            ptrNODE tail{ after };
-            while (tail->next != nullptr)
-                tail = tail->next;
-
-            // Присоединяем найденную группу в конец
-            tail->next = first;
-        }
+            switch_fragment(before, last, tail);
     }
-
     return found;
 }
 
@@ -93,7 +67,9 @@ int main()
         std::cout << "Sorted list: ";
         print(head);
 
-        bool found{ task15(head) };
+        
+
+        bool found{task15(head)};
 
         std::ofstream output("output.txt");
         if (!output)

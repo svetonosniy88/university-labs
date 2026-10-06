@@ -1,16 +1,32 @@
 #include "list.h"
 
-#include <functional>
 #include <stdexcept>
+
+namespace
+{
+    bool read_value(std::ifstream& file, TInfo& elem)
+    {
+        file >> std::ws;
+
+        if (file.bad() || (file.fail() && !file.eof()))
+            throw std::runtime_error("Failed to read input.txt.");
+
+        bool found{!file.eof()};
+        if (found && !(file >> elem))
+            throw std::runtime_error("input.txt must contain only integers in the int range.");
+
+        return found;
+    }
+}
 
 void init(ptrNODE& head)
 {
-    head = nullptr;
+    head = new NODE(0, nullptr);
 }
 
 bool empty(ptrNODE head)
 {
-    return head == nullptr;
+    return head->next == nullptr;
 }
 
 void add_by_pointer(ptrNODE& ptr, TInfo elem)
@@ -18,12 +34,12 @@ void add_by_pointer(ptrNODE& ptr, TInfo elem)
     ptr = new NODE(elem, ptr);
 }
 
-void add_to_head(ptrNODE& head, TInfo elem)
+void add_to_head(ptrNODE head, TInfo elem)
 {
-    add_by_pointer(head, elem);
+    add_after(head, elem);
 }
 
-void add_after(ptrNODE& ptr, TInfo elem)
+void add_after(ptrNODE ptr, TInfo elem)
 {
     if (ptr != nullptr)
         add_by_pointer(ptr->next, elem);
@@ -39,15 +55,23 @@ void del_by_pointer(ptrNODE& ptr)
     }
 }
 
-void del_from_head(ptrNODE& head)
+void del_from_head(ptrNODE head)
 {
-    del_by_pointer(head);
+    del_after(head);
 }
 
-void del_after(ptrNODE& ptr)
+void del_after(ptrNODE ptr)
 {
     if (ptr != nullptr)
         del_by_pointer(ptr->next);
+}
+
+void switch_fragment(ptrNODE before, ptrNODE last, ptrNODE place)
+{
+    ptrNODE first{before->next};
+    before->next = last->next;
+    last->next = place->next;
+    place->next = first;
 }
 
 void print(ptrNODE head, std::ostream& stream)
@@ -56,7 +80,7 @@ void print(ptrNODE head, std::ostream& stream)
         stream << "empty";
     else
     {
-        ptrNODE ptr{head};
+        ptrNODE ptr{head->next};
         while (ptr)
         {
             stream << ptr->info << ' ';
@@ -69,31 +93,46 @@ void print(ptrNODE head, std::ostream& stream)
 void clear(ptrNODE& head)
 {
     while (head)
-        del_from_head(head);
+        del_by_pointer(head);
 }
 
 void create_by_stack(ptrNODE& head, std::ifstream& file)
 {
+    clear(head);
     init(head);
     TInfo elem{};
-    while (file >> elem)
-        add_to_head(head, elem);
+
+    try
+    {
+        while (read_value(file, elem))
+            add_to_head(head, elem);
+    }
+    catch (...)
+    {
+        clear(head);
+        throw;
+    }
 }
 
 void create_by_queue(ptrNODE& head, std::ifstream& file)
 {
+    clear(head);
     init(head);
     TInfo elem{};
+    ptrNODE tail{head};
 
-    if (file >> elem)
+    try
     {
-        add_to_head(head, elem);
-        ptrNODE tail{head};
-        while (file >> elem)
+        while (read_value(file, elem))
         {
             add_after(tail, elem);
             tail = tail->next;
         }
+    }
+    catch (...)
+    {
+        clear(head);
+        throw;
     }
 }
 
@@ -103,32 +142,15 @@ ptrNODE create_by_order(std::ifstream& file)
     init(head);
     TInfo elem{};
 
-    std::function<ptrNODE(TInfo)> find_place = [&head](TInfo elem)
-    {
-        ptrNODE ptr{head};
-        while (ptr->next && ptr->next->info < elem)
-            ptr = ptr->next;
-        return ptr;
-    };
-
     try
     {
-        while (file >> std::ws && !file.eof())
+        while (read_value(file, elem))
         {
-            if (!(file >> elem))
-                throw std::runtime_error("input.txt must contain only integers in the int range.");
-
-            if (empty(head) || elem < head->info)
-                add_to_head(head, elem);
-            else
-            {
-                ptrNODE ptr{find_place(elem)};
-                add_after(ptr, elem);
-            }
+            ptrNODE ptr{head};
+            while (ptr->next != nullptr && ptr->next->info < elem)
+                ptr = ptr->next;
+            add_after(ptr, elem);
         }
-
-        if (file.bad())
-            throw std::runtime_error("Failed to read input.txt.");
     }
     catch (...)
     {
