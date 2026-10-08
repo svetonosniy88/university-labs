@@ -50,7 +50,7 @@ void del_by_pointer(ptrNODE& ptr)
     if (ptr != nullptr)
     {
         ptrNODE tmp{ptr};
-        ptr = tmp->next;
+        ptr = ptr->next;
         delete tmp;
     }
 }
