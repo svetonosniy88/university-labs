@@ -2,9 +2,6 @@
   <Configurations>
     <Platform Name="x64" />
   </Configurations>
-  <Folder Name="/Элементы решения/">
-    <File Path="output.txt" />
-  </Folder>
-  <Project Path="lab_01.vcxproj" Id="2e7fcf64-bc91-4d18-ae16-e28dad759711" />
+  <Project Path="homework.vcxproj" Id="11fc5b6b-5ab9-47ab-a534-ff8985130818" />
   <Project Path="../flist/flist.vcxproj" Id="7b0d8e56-0170-489d-a5fa-ab5f44840d9f" />
 </Solution>

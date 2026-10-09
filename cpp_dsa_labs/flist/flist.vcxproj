@@ -13,19 +13,19 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>18.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{2E7FCF64-BC91-4D18-AE16-E28DAD759711}</ProjectGuid>
-    <RootNamespace>lab_01</RootNamespace>
+    <ProjectGuid>{7B0D8E56-0170-489D-A5FA-AB5F44840D9F}</ProjectGuid>
+    <RootNamespace>flist</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v145</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v145</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -48,11 +48,8 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />
   <ItemGroup>
-    <ClCompile Include="main.cpp" />
-    <None Include="input.txt" />
+    <ClCompile Include="FLIST.cpp" />
+    <ClInclude Include="FLIST.h" />
     <None Include="README.md" />
-    <ProjectReference Include="..\flist\flist.vcxproj">
-      <Project>{7B0D8E56-0170-489D-A5FA-AB5F44840D9F}</Project>
-    </ProjectReference>
   </ItemGroup>
 </Project>

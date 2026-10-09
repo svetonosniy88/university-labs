@@ -1,0 +1,16 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+  </Configurations>
+  <Folder Name="/Общие материалы/">
+    <File Path="README.md" />
+    <File Path="dsa_common.props" />
+    <File Path="materials/2026-10-09/README.md" />
+    <File Path="materials/2026-10-09/FLIST.h" />
+    <File Path="materials/2026-10-09/FLIST.cpp" />
+    <File Path="materials/2026-10-09/Source.cpp" />
+  </Folder>
+  <Project Path="flist/flist.vcxproj" Id="7b0d8e56-0170-489d-a5fa-ab5f44840d9f" />
+  <Project Path="lab_01/lab_01.vcxproj" Id="2e7fcf64-bc91-4d18-ae16-e28dad759711" />
+  <Project Path="homework/homework.vcxproj" Id="11fc5b6b-5ab9-47ab-a534-ff8985130818" />
+</Solution>
