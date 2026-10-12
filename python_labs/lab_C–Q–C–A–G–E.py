@@ -35,7 +35,7 @@ def draw_graph_1(gr1, rng) -> None:
     gr1.text(
         0.05,
         0.95,
-        "Фамилия",
+        "Кузнецов",
         transform=gr1.transAxes,
         verticalalignment="top"
     )
