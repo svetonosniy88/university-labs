@@ -118,13 +118,6 @@ void flist::FLIST::removee(TInfo value)
 
 void flist::FLIST::sorting()
 {
-	auto switch_pointers = [](ptrNODE q, ptrNODE p)
-		{
-			ptrNODE tmp{ p->next };
-			p->next = tmp->next;
-			tmp->next = q->next;
-			q->next = tmp;
-		};
 	auto find_place = [this](TInfo elem) //->ptrNODE
 		{
 			ptrNODE result{ head };
@@ -139,7 +132,7 @@ void flist::FLIST::sorting()
 		{
 			if (h_prev->info > h->info)
 			{
-				switch_pointers(find_place(h->info), h_prev);
+				swap(h_prev, find_place(h->info));
 				h = h_prev->next;
 			}
 			else
@@ -149,6 +142,14 @@ void flist::FLIST::sorting()
 			}
 		}
 	}
+}
+
+void flist::FLIST::swap(ptrNODE from, ptrNODE where)
+{
+	ptrNODE elem{ from->next };
+	from->next = elem->next;
+	elem->next = where->next;
+	where->next = elem;
 }
 
 void flist::FLIST::switch_fragment(ptrNODE where, ptrNODE begin, ptrNODE end) {

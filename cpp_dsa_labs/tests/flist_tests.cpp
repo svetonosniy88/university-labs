@@ -140,6 +140,54 @@ void test_fragments()
     require(head == list.get_head(), "Transfer replaced sentinel");
 }
 
+void test_swap()
+{
+    // Every valid source/destination pair in lists of length 1..6: 91 cases.
+    for (int length = 1; length <= 6; ++length)
+    {
+        for (int from_index = 0; from_index < length; ++from_index)
+        {
+            for (int where_index = 0; where_index <= length; ++where_index)
+            {
+                if (where_index == from_index + 1)
+                    continue; // The moved node cannot be its own destination.
+                flist::FLIST list;
+                flist::ptrNODE head{ list.get_head() }, tail{ head };
+                std::vector<flist::ptrNODE> nodes;
+                std::vector<int> values;
+                for (int index = 0; index < length; ++index)
+                {
+                    int value{ index % 3 - 1 };
+                    list.insert_after(tail, value);
+                    tail = tail->next;
+                    nodes.push_back(tail);
+                    values.push_back(value);
+                }
+                flist::ptrNODE from{ from_index == 0 ? head : nodes[from_index - 1] };
+                flist::ptrNODE where{ where_index == 0 ? head : nodes[where_index - 1] };
+                flist::ptrNODE moved{ nodes[from_index] };
+                int value{ values[from_index] };
+                nodes.erase(nodes.begin() + from_index);
+                values.erase(values.begin() + from_index);
+                auto position = where == head ? nodes.begin() : std::find(nodes.begin(), nodes.end(), where) + 1;
+                auto offset = position - nodes.begin();
+                nodes.insert(position, moved);
+                values.insert(values.begin() + offset, value);
+                list.swap(from, where);
+                require(list.get_head() == head, "swap replaced sentinel");
+                require(values_of(list) == values, "swap order or node values failed");
+                flist::ptrNODE ptr{ head->next };
+                for (flist::ptrNODE expected : nodes)
+                {
+                    require(ptr == expected, "swap must move nodes, not just values");
+                    ptr = ptr->next;
+                }
+                require(!ptr, "swap added a node or made a cycle");
+            }
+        }
+    }
+}
+
 void test_recursion()
 {
     flist::FLIST list;
@@ -227,9 +275,10 @@ int main()
         test_container();
         test_sorting();
         test_fragments();
+        test_swap();
         test_recursion();
         test_reading();
-        std::cout << "All FLIST and homework checks passed (364 sorting cases).\n";
+        std::cout << "All FLIST and homework checks passed (364 sorting, 91 node-transfer cases).\n";
     }
     catch (const std::exception& error)
     {

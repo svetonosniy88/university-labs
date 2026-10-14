@@ -1,0 +1,53 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Анкета игрока</title>
+</head>
+<body background="Фон.gif" text="#263342" link="#d82e43" vlink="#a82336">
+<font face="Arial">
+<table width="780" align="center" cellpadding="24" cellspacing="0" bgcolor="#ffffff">
+<tr><td>
+<h1><font color="#182431">Анкета игрока</font></h1>
+<form action="Анкета.html" method="post" enctype="multipart/form-data">
+<table width="100%" cellpadding="10">
+    <tr><td width="50%" valign="top">
+        <p>Ник:<br><input type="text" name="nickname" size="25"></p>
+        <p>Код приглашения:<br><input type="password" name="invite" size="25"></p>
+        <p>Есть ли у вас микрофон?<br>
+            <input type="radio" name="microphone" value="yes"> Да
+            <input type="radio" name="microphone" value="no"> Нет</p>
+        <p>Как часто играете?<br>
+            <select name="frequency">
+                <option value="daily">Каждый день</option>
+                <option value="weekly">Несколько раз в неделю</option>
+                <option value="rarely">Редко</option>
+            </select></p>
+    </td><td valign="top">
+        <p>Любимые режимы:<br>
+            <input type="checkbox" name="mode" value="ranked"> Рейтинговый<br>
+            <input type="checkbox" name="mode" value="unrated"> Без рейтинга<br>
+            <input type="checkbox" name="mode" value="deathmatch"> Бой насмерть</p>
+        <p>Любимые агенты:<br>
+            <select name="agents" size="4" multiple>
+                <option value="Jett">Jett</option>
+                <option value="Sova">Sova</option>
+                <option value="Sage">Sage</option>
+                <option value="Brimstone">Brimstone</option>
+            </select></p>
+    </td></tr>
+    <tr><td colspan="2">
+        <p>Что вам нравится в игре?<br><textarea name="comment" rows="3" cols="60"></textarea></p>
+        <p>Скриншот из игры: <input type="file" name="screenshot"></p>
+        <input type="hidden" name="game" value="valorant">
+        <p><input type="submit" value="Отправить">
+           <input type="reset" value="Сбросить">
+           <input type="button" value="Открыть Ascent" onclick="window.open('Ascent.html')"></p>
+        <p><input type="image" src="Отправить.png" name="send" width="48" height="48" alt="Отправить анкету" title="Отправить анкету"></p>
+    </td></tr>
+</table>
+</form>
+</td></tr>
+</table>
+</font>
+</body>
+</html>

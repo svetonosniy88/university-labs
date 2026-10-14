@@ -74,6 +74,8 @@ namespace flist
 		//void remove(TInfo value);
 		void removee(TInfo value);
 		void sorting();
+		// Переносит узел после from на место после where.
+		void swap(ptrNODE from, ptrNODE where);
 		void switch_fragment(ptrNODE where, ptrNODE begin, ptrNODE end);
 	};
 

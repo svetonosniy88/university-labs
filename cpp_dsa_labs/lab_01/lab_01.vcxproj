@@ -49,10 +49,9 @@
   <ImportGroup Label="ExtensionTargets" />
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="..\flist\FLIST.cpp" />
+    <ClInclude Include="..\flist\FLIST.h" />
     <None Include="input.txt" />
     <None Include="README.md" />
-    <ProjectReference Include="..\flist\flist.vcxproj">
-      <Project>{7B0D8E56-0170-489D-A5FA-AB5F44840D9F}</Project>
-    </ProjectReference>
   </ItemGroup>
 </Project>

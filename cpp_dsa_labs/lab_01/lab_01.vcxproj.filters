@@ -8,6 +8,12 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\flist\FLIST.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClInclude Include="..\flist\FLIST.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <None Include="input.txt">
       <Filter>Resource Files</Filter>
     </None>
