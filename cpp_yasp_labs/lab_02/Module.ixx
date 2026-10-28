@@ -1,7 +1,11 @@
 module;
 
+#define WIN32_LEAN_AND_MEAN
+#define NOMINMAX
+#include <Windows.h>
 #include <iostream>
 #include <fstream>
+#include <filesystem>
 #include <cstdint>
 #include <cstddef>
 #include <cctype>
@@ -15,7 +19,7 @@ export module lab_module;
 /*
     Лабораторная работа № 2, вариант 4.
     Класс Fraction: числитель со знаком, беззнаковый знаменатель;
-    сложение, вычитание, умножение, деление, натуральная степень, сравнения.
+    сложение, вычитание, умножение, деление, степень, сравнения.
     Кузнецов Дмитрий Олегович, группа 91.
 */
 
@@ -62,17 +66,15 @@ export
     public:
         Fraction(std::int32_t n = 0, std::uint32_t d = 1);
 
-        Fraction power(std::uint32_t exponent) const;
+        Fraction power(const Fraction& exponent) const;
 
         Fraction& operator++();
         Fraction operator++(int);
 
         void to_string(char* text, std::size_t capacity) const;
-        void write(std::ostream& output) const;
     };
 }
 
-// Модуль INT32_MIN тоже помещается в uint32_t. Сам INT32_MIN не отрицаем.
 std::uint32_t magnitude(std::int32_t value)
 {
     if (value < 0)
@@ -138,7 +140,6 @@ Fraction::Fraction(std::int32_t n, std::uint32_t d)
     if (d == 0)
         throw std::invalid_argument("Denominator must be positive.");
 
-    // Делим модули, чтобы не приводить большой беззнаковый НОД к int32_t.
     if (n != 0)
     {
         std::uint32_t divisor{ gcd(magnitude(n), d) };
@@ -187,7 +188,6 @@ Fraction Fraction::add(
     if (n == 0)
         return Fraction{};
 
-    // Сначала сокращаем общий множитель, затем считаем знаменатель.
     std::uint32_t divisor{ gcd(n, common) };
 
     return from_parts(
@@ -250,8 +250,6 @@ bool operator!=(const Fraction& a, const Fraction& b)
     return !(a == b);
 }
 
-// Сравниваем целые части; при их равенстве переходим к обратным остаткам.
-// Это точное сравнение без опасного перемножения крест-накрест.
 bool operator<(const Fraction& a, const Fraction& b)
 {
     if ((a.numerator < 0) != (b.numerator < 0))
@@ -296,21 +294,88 @@ bool operator>=(const Fraction& a, const Fraction& b)
     return !(a < b);
 }
 
-Fraction Fraction::power(std::uint32_t exponent) const
+std::uint32_t exact_root(std::uint32_t value, std::uint32_t degree)
 {
-    if (exponent == 0)
-        throw std::invalid_argument("Natural exponent must be at least 1.");
+    if (value < 2 || degree == 1)
+        return value;
 
-    Fraction result{ 1 }, factor{ *this };
+    if (degree >= 32)
+        throw std::domain_error("The result is irrational and is not supported.");
 
-    while (exponent != 0)
+    std::uint32_t low{ 1 }, high{ value };
+
+    while (low <= high)
     {
-        if (exponent % 2 != 0)
+        std::uint32_t middle{ low + (high - low) / 2 };
+        std::uint32_t product{ 1 };
+        bool exceeds{ false };
+
+        for (std::uint32_t i{}; i < degree; ++i)
+        {
+            if (product > value / middle)
+            {
+                exceeds = true;
+                break;
+            }
+
+            product *= middle;
+        }
+
+        if (!exceeds && product == value)
+            return middle;
+
+        if (exceeds)
+            high = middle - 1;
+        else
+            low = middle + 1;
+    }
+
+    throw std::domain_error("The result is irrational and is not supported.");
+}
+
+Fraction Fraction::power(const Fraction& exponent) const
+{
+    if (exponent.numerator == 0)
+    {
+        if (numerator == 0)
+            throw std::domain_error("Zero to the power of zero is undefined.");
+
+        return Fraction{ 1 };
+    }
+
+    if (numerator == 0)
+    {
+        if (exponent.numerator < 0)
+            throw std::domain_error("Zero cannot have a negative exponent.");
+
+        return Fraction{};
+    }
+
+    if (numerator < 0 && exponent.denominator % 2 == 0)
+        throw std::domain_error("This power of a negative number has no real result.");
+
+    std::uint32_t n{ exact_root(magnitude(numerator), exponent.denominator) };
+    std::uint32_t d{ exact_root(denominator, exponent.denominator) };
+    bool negative{ numerator < 0 && magnitude(exponent.numerator) % 2 != 0 };
+
+    if (exponent.numerator < 0)
+    {
+        std::uint32_t previous{ n };
+        n = d;
+        d = previous;
+    }
+
+    Fraction result{ 1 }, factor{ from_parts(n, d, negative) };
+    std::uint32_t remaining{ magnitude(exponent.numerator) };
+
+    while (remaining != 0)
+    {
+        if (remaining % 2 != 0)
             result = result * factor;
 
-        exponent /= 2;
+        remaining /= 2;
 
-        if (exponent != 0)
+        if (remaining != 0)
             factor = factor * factor;
     }
 
@@ -338,10 +403,19 @@ void Fraction::to_string(char* text, std::size_t capacity) const
     if (capacity == 0)
         throw std::length_error("Text buffer is too small.");
 
-    char* end{ text + capacity - 1 }; // Место для завершающего нуля.
+    char* end{ text + capacity - 1 };
     std::to_chars_result first{ std::to_chars(text, end, numerator) };
 
-    if (first.ec != std::errc{} || first.ptr == end)
+    if (first.ec != std::errc{})
+        throw std::length_error("Text buffer is too small.");
+
+    if (denominator == 1)
+    {
+        *first.ptr = '\0';
+        return;
+    }
+
+    if (first.ptr == end)
         throw std::length_error("Text buffer is too small.");
 
     *first.ptr = '/';
@@ -354,12 +428,6 @@ void Fraction::to_string(char* text, std::size_t capacity) const
     *second.ptr = '\0';
 }
 
-void Fraction::write(std::ostream& output) const
-{
-    output << numerator << ' ' << denominator << '\n';
-}
-
-// Общий построчный ввод для консоли и файла. Длинную строку удаляем целиком.
 bool read_line(
     std::istream& input,
     char* text,
@@ -371,7 +439,7 @@ bool read_line(
         std::streamsize length{ input.gcount() };
 
         if (!input.eof())
-            --length; // getline учитывает извлечённый перевод строки.
+            --length;
 
         if (static_cast<std::streamsize>(std::strlen(text)) != length)
             throw std::invalid_argument("Input line contains a zero byte.");
@@ -402,6 +470,7 @@ const char* skip_spaces(const char* text)
 bool read_fraction(std::istream& input, Fraction& value)
 {
     char text[128]{};
+    const char* format_error{ "Enter an integer, n/d or n d with a positive denominator." };
 
     if (!read_line(input, text, sizeof(text)))
         return false;
@@ -415,10 +484,21 @@ bool read_fraction(std::istream& input, Fraction& value)
     std::int32_t n{};
     std::from_chars_result first{ std::from_chars(start, end, n) };
 
-    if (first.ec != std::errc{} || !std::isspace(static_cast<unsigned char>(*first.ptr)))
-        throw std::invalid_argument("Enter numerator and positive denominator, separated by a space.");
+    if (first.ec != std::errc{})
+        throw std::invalid_argument(format_error);
 
     start = skip_spaces(first.ptr);
+
+    if (*start == '\0')
+    {
+        value = Fraction{ n };
+        return true;
+    }
+
+    if (*start == '/')
+        start = skip_spaces(start + 1);
+    else if (start == first.ptr)
+        throw std::invalid_argument(format_error);
 
     if (*start == '+' && start[1] >= '0' && start[1] <= '9')
         ++start;
@@ -426,14 +506,19 @@ bool read_fraction(std::istream& input, Fraction& value)
     std::uint32_t d{};
     std::from_chars_result second{ std::from_chars(start, end, d) };
 
-    if (second.ec != std::errc{} || *skip_spaces(second.ptr) != '\0')
-        throw std::invalid_argument("Invalid denominator or extra characters.");
+    if (second.ec != std::errc{} || d == 0 || *skip_spaces(second.ptr) != '\0')
+        throw std::invalid_argument(format_error);
 
     value = Fraction{ n, d };
     return true;
 }
 
-export bool read_number(const char* prompt, std::uint32_t& value)
+export bool read_choice(
+    const char* prompt,
+    std::uint32_t& value,
+    std::uint32_t minimum,
+    std::uint32_t maximum
+)
 {
     while (true)
     {
@@ -447,15 +532,34 @@ export bool read_number(const char* prompt, std::uint32_t& value)
 
             const char* start{ skip_spaces(text) };
 
-            if (*start == '+' && start[1] >= '0' && start[1] <= '9')
-                ++start;
+            if (*start >= '0' && *start <= '9' && *skip_spaces(start + 1) == '\0')
+            {
+                std::uint32_t selected{ static_cast<std::uint32_t>(*start - '0') };
 
-            std::from_chars_result parsed{ std::from_chars(start, text + std::strlen(text), value) };
+                if (selected >= minimum && selected <= maximum)
+                {
+                    value = selected;
+                    return true;
+                }
+            }
+        }
+        catch (const std::invalid_argument&)
+        {
+        }
 
-            if (parsed.ec == std::errc{} && *skip_spaces(parsed.ptr) == '\0')
-                return true;
+        std::cout << "Enter one integer menu number from " << minimum << " to " << maximum << ".\n";
+    }
+}
 
-            std::cout << "Enter a whole number from 0 to 4294967295.\n";
+export bool read_fraction_from_console(const char* prompt, Fraction& value)
+{
+    while (true)
+    {
+        std::cout << prompt;
+
+        try
+        {
+            return read_fraction(std::cin, value);
         }
         catch (const std::invalid_argument& error)
         {
@@ -466,45 +570,113 @@ export bool read_number(const char* prompt, std::uint32_t& value)
 
 export bool read_from_console(Fraction& a, Fraction& b)
 {
-    Fraction values[2];
+    Fraction first, second;
 
-    for (std::uint32_t i{}; i < 2; ++i)
-    {
-        while (true)
-        {
-            std::cout << (i == 0 ? "A" : "B") << " (numerator denominator): ";
+    if (!read_fraction_from_console("A (integer, n/d or n d): ", first))
+        return false;
 
-            try
-            {
-                if (!read_fraction(std::cin, values[i]))
-                    return false;
+    if (!read_fraction_from_console("B (integer, n/d or n d): ", second))
+        return false;
 
-                break;
-            }
-            catch (const std::invalid_argument& error)
-            {
-                std::cout << error.what() << '\n';
-            }
-        }
-    }
-    a = values[0];
-    b = values[1];
+    a = first;
+    b = second;
 
     return true;
 }
 
-export bool read_filename(char* name, std::streamsize capacity)
+void validate_component(const char* name, std::size_t length)
+{
+    if (length == 0 || (length == 1 && name[0] == '.') ||
+        (length == 2 && name[0] == '.' && name[1] == '.'))
+        return;
+
+    if (name[length - 1] == ' ' || name[length - 1] == '.')
+        throw std::invalid_argument("File and folder names cannot end with a space or dot.");
+
+    std::size_t stem_length{};
+
+    while (stem_length < length && name[stem_length] != '.')
+        ++stem_length;
+
+    while (stem_length != 0 && name[stem_length - 1] == ' ')
+        --stem_length;
+
+    if (stem_length > 7)
+        return;
+
+    char stem[8]{};
+
+    for (std::size_t i{}; i < stem_length; ++i)
+        stem[i] = static_cast<char>(std::toupper(static_cast<unsigned char>(name[i])));
+
+    if (std::strcmp(stem, "CON") == 0 || std::strcmp(stem, "PRN") == 0 ||
+        std::strcmp(stem, "AUX") == 0 || std::strcmp(stem, "NUL") == 0 ||
+        std::strcmp(stem, "CONIN$") == 0 || std::strcmp(stem, "CONOUT$") == 0 ||
+        (stem_length == 4 && stem[3] >= '1' && stem[3] <= '9' &&
+            (std::strncmp(stem, "COM", 3) == 0 || std::strncmp(stem, "LPT", 3) == 0)))
+        throw std::invalid_argument("Reserved Windows device names are not allowed.");
+}
+
+void validate_filename(const char* name, bool for_output)
+{
+    std::size_t length{ std::strlen(name) };
+
+    if (length == 0)
+        throw std::invalid_argument("File name cannot be empty.");
+
+    if (for_output && (std::strcmp(name, ".") == 0 || std::strcmp(name, "..") == 0))
+        throw std::invalid_argument("Enter a file name, not a folder.");
+
+    const char* component{ name };
+
+    for (std::size_t i{}; i <= length; ++i)
+    {
+        unsigned char symbol{ static_cast<unsigned char>(name[i]) };
+
+        if (symbol == ':' && !for_output && i == 1 &&
+            std::isalpha(static_cast<unsigned char>(name[0])))
+        {
+            component = name + 2;
+            continue;
+        }
+
+        if ((symbol != 0 && symbol < 32) ||
+            (symbol != 0 && std::strchr("<>:\"|?*", symbol) != nullptr))
+            throw std::invalid_argument("File name contains a forbidden character.");
+
+        if (symbol == '/' || symbol == '\\')
+        {
+            if (for_output)
+                throw std::invalid_argument("For saving, enter a file name without a path.");
+        }
+
+        if (symbol == 0 || symbol == '/' || symbol == '\\')
+        {
+            validate_component(component, static_cast<std::size_t>(name + i - component));
+            component = name + i + 1;
+        }
+    }
+}
+
+export bool read_filename(char* name, std::streamsize capacity, bool for_output)
 {
     while (true)
     {
-        std::cout << "File name (or full path): ";
+        std::cout << (for_output ? "Output file name (saved beside the program): " : "Input file name or path: ");
 
         try
         {
             if (!read_line(std::cin, name, capacity))
                 return false;
 
-            std::size_t length{ std::strlen(name) };
+            const char* start{ skip_spaces(name) };
+            std::size_t length{ std::strlen(start) };
+
+            while (length != 0 && std::isspace(static_cast<unsigned char>(start[length - 1])))
+                --length;
+
+            std::memmove(name, start, length);
+            name[length] = '\0';
 
             if (length >= 2 && name[0] == '"' && name[length - 1] == '"')
             {
@@ -512,10 +684,9 @@ export bool read_filename(char* name, std::streamsize capacity)
                 name[length - 2] = '\0';
             }
 
-            if (*skip_spaces(name) != '\0')
-                return true;
+            validate_filename(name, for_output);
 
-            std::cout << "File name cannot be empty.\n";
+            return true;
         }
         catch (const std::invalid_argument& error)
         {
@@ -530,6 +701,11 @@ export void load_from_file(
     const char* name
 )
 {
+    validate_filename(name, false);
+
+    if (!std::filesystem::is_regular_file(name))
+        throw std::runtime_error("Input must be an existing regular file, not a folder or device.");
+
     std::ifstream file{ name };
 
     if (!file.is_open())
@@ -545,7 +721,7 @@ export void load_from_file(
     if (file.bad())
         throw std::runtime_error("Input file read error.");
 
-    if (file.peek() != std::char_traits<char>::eof())
+    if (!file.eof())
         throw std::invalid_argument("Extra data after the two fractions.");
 
     a = first;
@@ -553,33 +729,34 @@ export void load_from_file(
 }
 
 export void save_to_file(
-    const Fraction& a,
-    const Fraction& b,
-    const char* name,
-    bool result_only = false
+    const char* report,
+    const char* name
 )
 {
-    std::ofstream file{ name, std::ios::trunc };
+    validate_filename(name, true);
+
+    wchar_t executable[1024]{};
+    DWORD length{ GetModuleFileNameW(nullptr, executable, 1024) };
+
+    if (length == 0 || length >= 1024)
+        throw std::runtime_error("Cannot determine the program folder.");
+
+    std::filesystem::path path{ std::filesystem::path{ executable }.parent_path() / name };
+
+    if (std::filesystem::is_symlink(std::filesystem::symlink_status(path)))
+        throw std::runtime_error("Saving through a symbolic link is not allowed.");
+
+    std::ofstream file{ path, std::ios::trunc };
 
     if (!file.is_open())
         throw std::runtime_error("Cannot open output file.");
 
-    a.write(file);
-
-    if (!result_only)
-        b.write(file);
+    file << report;
 
     file.close();
 
     if (!file)
         throw std::runtime_error("Output file write error.");
-}
 
-export void print_fraction(const char* label, const Fraction& value)
-{
-    char text[32]{};
-
-    value.to_string(text, sizeof(text));
-
-    std::cout << label << text << '\n';
+    std::cout << "Last successful report saved to " << path << " (previous contents replaced).\n";
 }

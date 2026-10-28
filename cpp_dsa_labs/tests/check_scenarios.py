@@ -20,8 +20,10 @@ def run(config, project, name, text, filename):
         target.write_text(text, encoding="utf-8")
     elif target.exists():
         target.unlink()
+    executable = "DSA_space" if project == "lab_01" else project
     return subprocess.run(
-        [str(ROOT / "build" / "x64" / config / project / f"{project}.exe")],
+        [str(ROOT / "build" / "x64" / config / executable / f"{executable}.exe")],
+        input="1\n\n0\n" if project == "lab_01" else None,
         cwd=folder, capture_output=True, text=True, encoding="utf-8", timeout=10,
     ), folder
 
@@ -61,7 +63,14 @@ def main():
             for name, text in (("missing", None), ("bad", "1 x"),
                                ("partial", "1 2x"), ("overflow", "2147483648")):
                 result, _ = run(config, project, name, text, filename)
-                assert result.returncode == 1 and "Error:" in result.stderr, (name, result)
+                if project == "lab_01":
+                    assert result.returncode == 0, (name, result)
+                    if name == "missing":
+                        assert "Cannot read this file" in result.stdout, (name, result)
+                    else:
+                        assert "Error:" in result.stderr, (name, result)
+                else:
+                    assert result.returncode == 1 and "Error:" in result.stderr, (name, result)
                 count += 1
         for name, text in (("example", "3 1 5 1 4 1"), ("empty", ""), ("only_five", "5")):
             result, _ = run(config, "homework", name, text, "data.txt")
