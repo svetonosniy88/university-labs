@@ -24,7 +24,7 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="examples\*.txt" />
-    <Text Include="README.md" />
+    <Text Include="res.txt" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>18.0</VCProjectVersion>

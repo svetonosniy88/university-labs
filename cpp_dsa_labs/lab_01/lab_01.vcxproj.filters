@@ -20,7 +20,6 @@
     <None Include="README.md">
       <Filter>Resource Files</Filter>
     </None>
-    <ClCompile Include="FileName.cpp" />
     <ClCompile Include="Stack.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -45,5 +44,8 @@
     <None Include="brackets.txt">
       <Filter>Resource Files</Filter>
     </None>
+    <ClCompile Include="study.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

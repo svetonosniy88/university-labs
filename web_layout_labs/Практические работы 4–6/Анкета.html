@@ -1,59 +1,82 @@
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Анкета игрока</title>
-    </head>
-    <body background="Фон.gif" text="#333333" link="#ff4655" vlink="#ff4655">
-        <font face="Arial">
-            <table width="800" align="center" cellpadding="20" cellspacing="0" bgcolor="#ffffff">
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Анкета игрока</title>
+    <!-- Связывание: оформление формы находится в site.css. -->
+    <link rel="stylesheet" href="site.css">
+</head>
+<body class="questionnaire">
+    <main class="article">
+        <h1>Анкета игрока</h1>
+        <p class="lead">Расскажите о своих игровых привычках и любимых агентах.</p>
+        <p class="hint">Кнопка отправки подготовит письмо на ku2.dmitry@yandex.ru в вашем почтовом приложении. Проверьте ответы перед отправкой.</p>
+
+        <form id="player-form" action="mailto:ku2.dmitry@yandex.ru" method="post" enctype="text/plain" accept-charset="UTF-8">
+            <table class="form-columns">
                 <tr>
                     <td>
-                        <h1>Анкета игрока</h1>
-                        <p>Ответьте на несколько вопросов о своих игровых привычках.</p>
-                        <p>Кнопка отправки откроет письмо на ku2.dmitry@yandex.ru в вашем почтовом приложении. Проверьте ответы и отправьте письмо.</p>
-                        <form action="mailto:ku2.dmitry@yandex.ru" method="post" enctype="text/plain" accept-charset="UTF-8">
-                            <table width="100%" cellpadding="10">
-                                <tr>
-                                    <td width="50%" valign="top">
-                                        <p>Ник:<br><input type="text" name="Ник" size="25"></p>
-                                        <p>Код приглашения:<br><input type="password" name="Код приглашения" size="25"></p>
-                                        <p>Есть ли у вас микрофон?<br>
-                                            <input type="radio" name="Микрофон" value="Да"> Да
-                                            <input type="radio" name="Микрофон" value="Нет"> Нет</p>
-                                        <p>Как часто играете?<br>
-                                            <select name="Частота игры">
-                                                <option value="Каждый день">Каждый день</option>
-                                                <option value="Несколько раз в неделю">Несколько раз в неделю</option>
-                                                <option value="Редко">Редко</option>
-                                        </select></p>
-                                    </td>
-                                    <td valign="top">
-                                        <p>Любимые режимы:<br>
-                                            <input type="checkbox" name="Режим" value="Рейтинговый"> Рейтинговый<br>
-                                            <input type="checkbox" name="Режим" value="Без рейтинга"> Без рейтинга<br>
-                                            <input type="checkbox" name="Режим" value="Бой насмерть"> Бой насмерть</p>
-                                        <p>Любимые агенты:<br>
-                                            <select name="Агенты" size="4" multiple>
-                                                <option value="Jett">Jett</option>
-                                                <option value="Sova">Sova</option>
-                                                <option value="Sage">Sage</option>
-                                                <option value="Brimstone">Brimstone</option>
-                                        </select></p>
-                                    </td>
-                                </tr>
-                            </table>
-                            <p>Что вам нравится в игре?<br><textarea name="Комментарий" rows="3" cols="60"></textarea></p>
-                            <p>Скриншот из игры (необязательно): <input type="file" name="Скриншот"></p>
-                            <p><small>Выбранный скриншот нужно прикрепить к письму вручную. Для отправки требуется настроенное почтовое приложение.</small></p>
-                            <input type="hidden" name="Игра" value="VALORANT">
-                            <p><input type="submit" value="Подготовить письмо">
-                                <input type="reset" value="Сбросить">
-                                <input type="button" value="Открыть Lotus" onclick="window.open('Lotus.html')"></p>
-                            <p><input type="image" src="Отправить.png" name="send" width="50" height="50" alt="Подготовить письмо с ответами" title="Подготовить письмо с ответами"></p>
-                        </form>
+                        <p>
+                            <label for="nickname">Ник</label>
+                            <input class="field" id="nickname" type="text" name="Ник" placeholder="Ваш игровой ник">
+                        </p>
+                        <p>
+                            <label for="invite">Код приглашения</label>
+                            <input class="field" id="invite" type="password" name="Код приглашения">
+                        </p>
+                        <fieldset>
+                            <legend>Есть ли у вас микрофон?</legend>
+                            <label class="option"><input type="radio" name="Микрофон" value="Да"> Да</label>
+                            <label class="option"><input type="radio" name="Микрофон" value="Нет"> Нет</label>
+                        </fieldset>
+                        <p>
+                            <label for="frequency">Как часто играете?</label>
+                            <select class="field" id="frequency" name="Частота игры">
+                                <option value="Каждый день">Каждый день</option>
+                                <option value="Несколько раз в неделю">Несколько раз в неделю</option>
+                                <option value="Редко">Редко</option>
+                            </select>
+                        </p>
+                    </td>
+                    <td>
+                        <fieldset>
+                            <legend>Любимые режимы</legend>
+                            <label class="option"><input type="checkbox" name="Режим" value="Рейтинговый"> Рейтинговый</label>
+                            <label class="option"><input type="checkbox" name="Режим" value="Без рейтинга"> Без рейтинга</label>
+                            <label class="option"><input type="checkbox" name="Режим" value="Бой насмерть"> Бой насмерть</label>
+                        </fieldset>
+                        <p>
+                            <label for="agents">Любимые агенты</label>
+                            <select class="field" id="agents" name="Агенты" size="4" multiple>
+                                <option value="Jett">Jett</option>
+                                <option value="Sova">Sova</option>
+                                <option value="Sage">Sage</option>
+                                <option value="Brimstone">Brimstone</option>
+                            </select>
+                        </p>
+                        <p class="hint">Чтобы выбрать несколько агентов, удерживайте Ctrl.</p>
                     </td>
                 </tr>
             </table>
-        </font>
-    </body>
+
+            <p>
+                <label for="comment">Что вам нравится в игре?</label>
+                <textarea class="field" id="comment" name="Комментарий" rows="4" placeholder="Командная игра, любимые карты, интересные моменты…"></textarea>
+            </p>
+            <p>
+                <label for="screenshot">Скриншот из игры (необязательно)</label><br>
+                <input id="screenshot" type="file" name="Скриншот" accept="image/*">
+            </p>
+            <p class="hint">Выбранный скриншот прикрепите к письму вручную. Для отправки требуется настроенное почтовое приложение.</p>
+            <input type="hidden" name="Игра" value="VALORANT">
+            <p>
+                <input class="button button-primary" type="submit" value="Подготовить письмо">
+                <input class="button" type="reset" value="Сбросить">
+                <input class="button" type="button" value="Открыть Lotus" onclick="window.open('Lotus.html')">
+                <input class="send-image" type="image" src="Отправить.png" name="send" width="34" height="34" alt="Подготовить письмо с ответами" title="Подготовить письмо с ответами">
+            </p>
+        </form>
+    </main>
+</body>
 </html>

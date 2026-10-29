@@ -54,9 +54,9 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />
   <ItemGroup>
-    <ClCompile Include="FileName.cpp" />
     <ClCompile Include="Stack.cpp" />
     <ClCompile Include="Queue.cpp" />
+    <ClCompile Include="study.cpp" />
     <ClCompile Include="Tasks.cpp" />
     <ClInclude Include="Stack.h" />
     <ClInclude Include="Queue.h" />

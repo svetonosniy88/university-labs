@@ -1,0 +1,159 @@
+/* Общие правила и одинаковое отображение разных фоновых изображений. */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 28px;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    color: #293643;
+    background-color: #0f1923;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+.home { background-image: url("images/ascent.png"); }
+.agents { background-image: url("images/haven.png"); }
+.weapons { background-image: url("images/bind.png"); }
+.questionnaire { background-image: url("images/sunset.png"); }
+.lotus { background-image: url("images/lotus.png"); }
+
+.article {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 32px;
+    background-color: #ffffff;
+    border-top: 4px solid #ff4655;
+}
+
+h1 {
+    margin: 0 0 20px;
+    font-size: 32px;
+    line-height: 1.2;
+}
+
+h2 {
+    margin: 24px 0 12px;
+    font-size: 22px;
+}
+
+p { margin: 0 0 16px; }
+.lead { font-size: 18px; }
+a { color: #b7283a; }
+a:hover { color: #e32d43; }
+
+/* Таблицы с портретами и оружием. */
+.catalog {
+    width: 100%;
+    border-spacing: 0 16px;
+}
+
+.catalog td {
+    padding: 16px;
+    vertical-align: top;
+}
+
+.catalog h2 { margin-top: 0; }
+.catalog img { display: block; max-width: 100%; height: auto; }
+.portrait { width: 180px; background-color: #0f1923; }
+.portrait img { margin: 0 auto; }
+
+.map-scroll {
+    max-width: 642px;
+    margin: 0 auto;
+    overflow: auto;
+    border: 1px solid #c5ced6;
+    background-color: #0f1923;
+}
+
+.map-scroll img { display: block; }
+
+/* Шапка, меню и подвал — отдельные HTML-документы во фреймах. */
+.shell {
+    padding: 0;
+    color: #eeeeee;
+    background-color: #0f1923;
+}
+
+.header-table {
+    width: 100%;
+    height: 100px;
+    border-collapse: collapse;
+    border-bottom: 3px solid #ff4655;
+    text-align: center;
+}
+
+.logo-cell { width: 90px; padding: 16px; }
+.header-table h1 { margin: 0; color: #ff4655; letter-spacing: 4px; }
+.header-table p { margin: 4px 0 0; font-size: 12px; letter-spacing: 2px; }
+
+.menu { padding: 22px 12px; }
+.menu a {
+    display: block;
+    margin-bottom: 8px;
+    padding: 10px 14px;
+    border-left: 3px solid transparent;
+    color: #eeeeee;
+    text-decoration: none;
+}
+
+.menu a:hover, .menu a:focus {
+    color: #ffffff;
+    background-color: #233140;
+    border-left-color: #ff4655;
+}
+
+.footer { margin: 0; padding: 10px; text-align: center; font-size: 12px; }
+.footer a { color: #ff6572; }
+
+/* Анкета: идентификатор формы и повторяемые классы её элементов. */
+#player-form { margin-top: 24px; }
+.form-columns { width: 100%; border-spacing: 0; }
+.form-columns td { width: 50%; padding: 12px; vertical-align: top; }
+
+.field {
+    display: block;
+    width: 100%;
+    margin-top: 6px;
+    padding: 11px;
+    border: 1px solid #aebdc9;
+    border-radius: 4px;
+    font: inherit;
+    background-color: #f6f8fa;
+}
+
+.field:focus { outline: 2px solid #d32c40; outline-offset: 1px; }
+textarea.field { min-height: 110px; resize: vertical; }
+fieldset { margin: 0 0 18px; padding: 14px; border: 1px solid #ccd6df; }
+legend { padding: 0 6px; font-weight: bold; }
+.option { display: block; margin: 6px 0; }
+input[type="radio"], input[type="checkbox"] { accent-color: #d32c40; }
+.hint { font-size: 13px; color: #536674; }
+
+.button {
+    margin: 0 8px 8px 0;
+    padding: 11px 16px;
+    border: 1px solid #b9c5ce;
+    border-radius: 4px;
+    font: inherit;
+    color: #293643;
+    background-color: #edf1f4;
+    cursor: pointer;
+}
+
+.button-primary { color: #ffffff; background-color: #c72c40; border-color: #c72c40; }
+.button:hover { border-color: #c72c40; }
+.send-image { vertical-align: middle; margin: 0 0 8px 4px; }
+
+/* На узкой странице строки таблиц становятся вертикальными. */
+@media (max-width: 650px) {
+    body { padding: 16px; }
+    .article { padding: 22px; }
+    h1 { font-size: 28px; }
+    .catalog td, .form-columns td { display: block; width: 100%; }
+    .shell { padding: 0; }
+}

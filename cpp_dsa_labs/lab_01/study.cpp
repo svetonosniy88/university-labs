@@ -1,0 +1,2 @@
+toStack
+printStack(std::<int>)

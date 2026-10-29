@@ -1,0 +1,17 @@
+/* Импортируемые правила для страницы «Оружие». */
+.weapons h2 {
+    color: #b7283a;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.weapons .catalog td {
+    border-bottom: 1px solid #d9e1e7;
+}
+
+.weapon-picture {
+    width: 38%;
+    background-color: #edf1f4;
+}
+
+.weapons li { margin-bottom: 10px; }

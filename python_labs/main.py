@@ -55,7 +55,7 @@ def load_from_file(filename: str) -> Attestat:
             if line == "":
                 continue
 
-            subject, grade = line.rsplit("\t", 1)
+            subject, grade = line.rsplit(" ", 1)
             attestat += (subject, int(grade))
 
     return attestat
