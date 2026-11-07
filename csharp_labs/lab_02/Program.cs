@@ -72,38 +72,40 @@ class Program
             Console.WriteLine("({0:G}; {1:G})", a[i], a[i + 1]);
     }
 
-    static void sort_intervals(double[] a)
-    {
-        for (int i = 2; i < a.Length; i += 2)
-        {
-            double left = a[i];
-            double right = a[i + 1];
-            int j = i - 2;
-
-            while (j >= 0 && a[j] > left)
-            {
-                a[j + 2] = a[j];
-                a[j + 3] = a[j + 1];
-                j -= 2;
-            }
-
-            a[j + 2] = left;
-            a[j + 3] = right;
-        }
-    }
-
     static bool find_union(double[] a, out double left, out double right)
     {
         left = a[0];
         right = a[1];
+        bool changed;
+
+        do
+        {
+            changed = false;
+
+            for (int i = 2; i < a.Length; i += 2)
+            {
+                if (left < a[i + 1] && a[i] < right)
+                {
+                    if (a[i] < left)
+                    {
+                        left = a[i];
+                        changed = true;
+                    }
+
+                    if (a[i + 1] > right)
+                    {
+                        right = a[i + 1];
+                        changed = true;
+                    }
+                }
+            }
+        }
+        while (changed);
 
         for (int i = 2; i < a.Length; i += 2)
         {
-            if (a[i] >= right)
+            if (a[i] < left || a[i + 1] > right)
                 return false;
-
-            if (a[i + 1] > right)
-                right = a[i + 1];
         }
 
         return true;
@@ -118,7 +120,6 @@ class Program
 
         read_array(a);
         print_array(a);
-        sort_intervals(a);
 
         if (find_union(a, out double left, out double right))
             Console.WriteLine("\nОбъединение является интервалом: ({0:G}; {1:G})", left, right);

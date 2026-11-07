@@ -52,7 +52,6 @@ void flist::FLIST::clear(ptrNODE begin, ptrNODE end)
 {
 	while (begin->next != end)
 	{
-		//del_by_pointer(begin->next);
 		erase_after(begin);
 	}
 }
