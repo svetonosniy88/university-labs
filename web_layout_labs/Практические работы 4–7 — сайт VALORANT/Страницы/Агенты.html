@@ -4,37 +4,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Агенты</title>
-    <!-- Связывание: общие правила находятся в отдельном файле. -->
-    <link rel="stylesheet" href="site.css">
-    <!-- Внедрение: оформление текста только на странице агентов. -->
+    <link rel="stylesheet" href="../Стили/Оформление сайта.css">
     <style>
-        .agents .intro { font-size: 18px; }
-        .agents h2 {
+        .catalog h2 {
             padding-bottom: 8px;
             border-bottom: 2px solid #ff4655;
             color: #b7283a;
         }
-        .agents .role { font-style: italic; color: #536674; }
+        .role { font-style: italic; color: #536674; }
     </style>
 </head>
 <body class="agents">
     <main class="article">
-        <h1>Агенты</h1>
-        <p class="intro">Роль агента подсказывает, какую задачу он помогает решать. Дуэлянты начинают выход, зачинщики собирают информацию и готовят столкновение, специалисты управляют обзором, а стражи удерживают позиции и прикрывают команду.</p>
+        <h1 id="agents-title">Агенты</h1>
+        <p class="lead">Роль агента подсказывает, какую задачу он помогает решать. Дуэлянты начинают выход, зачинщики собирают информацию и готовят столкновение, специалисты управляют обзором, а стражи удерживают позиции и прикрывают команду.</p>
         <p>Здесь выбраны четыре агента с разными задачами. Их портреты помогают связать имя и роль с узнаваемым персонажем.</p>
         <table class="catalog">
             <tr>
                 <td class="portrait">
-                    <img src="Jett.png" width="150" height="150" alt="Портрет агента Jett">
+                    <img src="../Изображения/Агенты/Jett.png" width="150" height="150" alt="Портрет агента Jett">
                 </td>
                 <td>
-                    <h2>Jett — <span class="role">Дуэлянт</span></h2>
+                    <h2 style="color: #a82234;">Jett — <span class="role">Дуэлянт</span></h2>
                     <p>Быстро занимает пространство и создаёт первый контакт с противником. Рывок помогает уйти с линии огня, а дымовая завеса — ненадолго закрыть опасный угол. Её выход полезен, когда союзники готовы поддержать его.</p>
                 </td>
             </tr>
             <tr>
                 <td class="portrait">
-                    <img src="Sova.png" width="150" height="150" alt="Портрет агента Sova">
+                    <img src="../Изображения/Агенты/Sova.png" width="150" height="150" alt="Портрет агента Sova">
                 </td>
                 <td>
                     <h2>Sova — <span class="role">Зачинщик</span></h2>
@@ -43,7 +40,7 @@
             </tr>
             <tr>
                 <td class="portrait">
-                    <img src="Sage.png" width="150" height="150" alt="Портрет агента Sage">
+                    <img src="../Изображения/Агенты/Sage.png" width="150" height="150" alt="Портрет агента Sage">
                 </td>
                 <td>
                     <h2>Sage — <span class="role">Страж</span></h2>
@@ -52,7 +49,7 @@
             </tr>
             <tr>
                 <td class="portrait">
-                    <img src="Brimstone.png" width="150" height="150" alt="Портрет агента Brimstone">
+                    <img src="../Изображения/Агенты/Brimstone.png" width="150" height="150" alt="Портрет агента Brimstone">
                 </td>
                 <td>
                     <h2>Brimstone — <span class="role">Специалист</span></h2>

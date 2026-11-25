@@ -1,4 +1,3 @@
-/* Общие правила и одинаковое отображение разных фоновых изображений. */
 * {
     box-sizing: border-box;
 }
@@ -13,14 +12,13 @@ body {
     background-color: #0f1923;
     background-size: cover;
     background-position: center;
-    background-attachment: fixed;
 }
 
-.home { background-image: url("images/ascent.png"); }
-.agents { background-image: url("images/haven.png"); }
-.weapons { background-image: url("images/bind.png"); }
-.questionnaire { background-image: url("images/sunset.png"); }
-.lotus { background-image: url("images/lotus.png"); }
+.home { background-image: url("../Изображения/Фоны/ascent.webp"); }
+.agents { background-image: url("../Изображения/Фоны/haven.webp"); }
+.weapons { background-image: url("../Изображения/Фоны/bind.webp"); }
+.questionnaire { background-image: url("../Изображения/Фоны/sunset.webp"); }
+.lotus { background-image: url("../Изображения/Фоны/lotus.webp"); }
 
 .article {
     max-width: 960px;
@@ -36,6 +34,8 @@ h1 {
     line-height: 1.2;
 }
 
+#agents-title { letter-spacing: .02em; }
+
 h2 {
     margin: 24px 0 12px;
     font-size: 22px;
@@ -44,9 +44,7 @@ h2 {
 p { margin: 0 0 16px; }
 .lead { font-size: 18px; }
 a { color: #b7283a; }
-a:hover { color: #e32d43; }
 
-/* Таблицы с портретами и оружием. */
 .catalog {
     width: 100%;
     border-spacing: 0 16px;
@@ -57,22 +55,32 @@ a:hover { color: #e32d43; }
     vertical-align: top;
 }
 
-.catalog h2 { margin-top: 0; }
+.catalog h2 {
+    margin-top: 0;
+    color: #293643;
+}
 .catalog img { display: block; max-width: 100%; height: auto; }
 .portrait { width: 180px; background-color: #0f1923; }
 .portrait img { margin: 0 auto; }
+
+.weapons h2 {
+    color: #b7283a;
+    text-transform: uppercase;
+}
+
+.weapon-picture {
+    width: 38%;
+    background-color: #edf1f4;
+}
 
 .map-scroll {
     max-width: 642px;
     margin: 0 auto;
     overflow: auto;
-    border: 1px solid #c5ced6;
-    background-color: #0f1923;
 }
 
 .map-scroll img { display: block; }
 
-/* Шапка, меню и подвал — отдельные HTML-документы во фреймах. */
 .shell {
     padding: 0;
     color: #eeeeee;
@@ -88,15 +96,13 @@ a:hover { color: #e32d43; }
 }
 
 .logo-cell { width: 90px; padding: 16px; }
-.header-table h1 { margin: 0; color: #ff4655; letter-spacing: 4px; }
-.header-table p { margin: 4px 0 0; font-size: 12px; letter-spacing: 2px; }
+.header-table h1 { margin: 0; color: #ff4655; }
+.header-table p { margin: 4px 0 0; font-size: 12px; }
 
 .menu { padding: 22px 12px; }
 .menu a {
     display: block;
-    margin-bottom: 8px;
     padding: 10px 14px;
-    border-left: 3px solid transparent;
     color: #eeeeee;
     text-decoration: none;
 }
@@ -104,14 +110,11 @@ a:hover { color: #e32d43; }
 .menu a:hover, .menu a:focus {
     color: #ffffff;
     background-color: #233140;
-    border-left-color: #ff4655;
 }
 
 .footer { margin: 0; padding: 10px; text-align: center; font-size: 12px; }
 .footer a { color: #ff6572; }
 
-/* Анкета: идентификатор формы и повторяемые классы её элементов. */
-#player-form { margin-top: 24px; }
 .form-columns { width: 100%; border-spacing: 0; }
 .form-columns td { width: 50%; padding: 12px; vertical-align: top; }
 
@@ -127,12 +130,9 @@ a:hover { color: #e32d43; }
 }
 
 .field:focus { outline: 2px solid #d32c40; outline-offset: 1px; }
-textarea.field { min-height: 110px; resize: vertical; }
 fieldset { margin: 0 0 18px; padding: 14px; border: 1px solid #ccd6df; }
-legend { padding: 0 6px; font-weight: bold; }
-.option { display: block; margin: 6px 0; }
-input[type="radio"], input[type="checkbox"] { accent-color: #d32c40; }
-.hint { font-size: 13px; color: #536674; }
+legend { font-weight: bold; }
+.option { display: block; }
 
 .button {
     margin: 0 8px 8px 0;
@@ -146,14 +146,8 @@ input[type="radio"], input[type="checkbox"] { accent-color: #d32c40; }
 }
 
 .button-primary { color: #ffffff; background-color: #c72c40; border-color: #c72c40; }
-.button:hover { border-color: #c72c40; }
-.send-image { vertical-align: middle; margin: 0 0 8px 4px; }
+a.button { display: inline-block; text-decoration: none; }
 
-/* На узкой странице строки таблиц становятся вертикальными. */
 @media (max-width: 650px) {
-    body { padding: 16px; }
-    .article { padding: 22px; }
-    h1 { font-size: 28px; }
     .catalog td, .form-columns td { display: block; width: 100%; }
-    .shell { padding: 0; }
 }

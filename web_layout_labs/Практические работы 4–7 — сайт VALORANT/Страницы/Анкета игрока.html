@@ -4,16 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Анкета игрока</title>
-    <!-- Связывание: оформление формы находится в site.css. -->
-    <link rel="stylesheet" href="site.css">
+    <link rel="stylesheet" href="../Стили/Оформление сайта.css">
 </head>
 <body class="questionnaire">
     <main class="article">
         <h1>Анкета игрока</h1>
         <p class="lead">Расскажите о своих игровых привычках и любимых агентах.</p>
-        <p class="hint">Кнопка отправки подготовит письмо на ku2.dmitry@yandex.ru в вашем почтовом приложении. Проверьте ответы перед отправкой.</p>
+        <p>Кнопка отправки подготовит письмо на ku2.dmitry@yandex.ru в вашем почтовом приложении. Проверьте ответы перед отправкой.</p>
 
-        <form id="player-form" action="mailto:ku2.dmitry@yandex.ru" method="post" enctype="text/plain" accept-charset="UTF-8">
+        <form action="mailto:ku2.dmitry@yandex.ru" method="post" enctype="text/plain" accept-charset="UTF-8">
             <table class="form-columns">
                 <tr>
                     <td>
@@ -55,7 +54,8 @@
                                 <option value="Brimstone">Brimstone</option>
                             </select>
                         </p>
-                        <p class="hint">Чтобы выбрать несколько агентов, удерживайте Ctrl.</p>
+                        <input class="button" type="button" value="Как выбрать несколько?" popovertarget="agents-help">
+                        <div id="agents-help" popover>Чтобы выбрать несколько агентов, удерживайте Ctrl.</div>
                     </td>
                 </tr>
             </table>
@@ -68,13 +68,13 @@
                 <label for="screenshot">Скриншот из игры (необязательно)</label><br>
                 <input id="screenshot" type="file" name="Скриншот" accept="image/*">
             </p>
-            <p class="hint">Выбранный скриншот прикрепите к письму вручную. Для отправки требуется настроенное почтовое приложение.</p>
+            <p>Выбранный скриншот прикрепите к письму вручную. Для отправки требуется настроенное почтовое приложение.</p>
             <input type="hidden" name="Игра" value="VALORANT">
             <p>
                 <input class="button button-primary" type="submit" value="Подготовить письмо">
                 <input class="button" type="reset" value="Сбросить">
-                <input class="button" type="button" value="Открыть Lotus" onclick="window.open('Lotus.html')">
-                <input class="send-image" type="image" src="Отправить.png" name="send" width="34" height="34" alt="Подготовить письмо с ответами" title="Подготовить письмо с ответами">
+                <a class="button" href="Миникарта Lotus.html" target="_blank">Открыть Lotus</a>
+                <input type="image" src="../Изображения/Кнопка отправки.png" name="send" width="34" height="34" alt="Подготовить письмо с ответами" title="Подготовить письмо с ответами">
             </p>
         </form>
     </main>

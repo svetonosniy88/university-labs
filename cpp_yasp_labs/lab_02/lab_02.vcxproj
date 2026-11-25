@@ -27,6 +27,10 @@
       <CompileAs>CompileAsCppModule</CompileAs>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="results\numb.txt" />
+    <Text Include="results\result.txt" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>18.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>

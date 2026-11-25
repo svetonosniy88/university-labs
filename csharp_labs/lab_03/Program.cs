@@ -69,7 +69,7 @@ class Program
         return original == reversed;
     }
 
-    static int[] find_symmetric(int n, int row, ref int[,] a, out int count)
+    static int[] find_symmetric(int n, int row, int[,] a, out int count)
     {
         int[] result = new int[n];
         count = 0;
@@ -117,7 +117,7 @@ class Program
 
             for (int row = 0; row < n; row++)
             {
-                int[] result = find_symmetric(n, row, ref a, out int count);
+                int[] result = find_symmetric(n, row, a, out int count);
                 print_result(row, result, count);
             }
         }
