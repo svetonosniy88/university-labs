@@ -305,7 +305,7 @@ std::uint32_t exact_root(std::uint32_t value, std::uint32_t degree)
     if (value < 2 || degree == 1)
         return value;
 
-    if (degree >= 32)
+    if (degree >= 16)
         throw std::domain_error("The result is irrational and is not supported.");
 
     std::uint32_t low{ 1 }, high{ value };

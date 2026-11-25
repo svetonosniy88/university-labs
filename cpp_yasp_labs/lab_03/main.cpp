@@ -18,8 +18,16 @@ void run_menu(Queue<X>& queue, const char* type, const char* format)
 {
     while (std::cin)
     {
-        std::cout << "\nQueue: " << type << "\n1. Push  2. Peek  3. Pop  4. Size  5. Find\n"
-                     "6. Print  7. Load from file  8. Save to file  0. Back\n";
+        std::cout << "\nQueue: " << type
+                  << "\n1. Push\n"
+                     "2. Peek\n"
+                     "3. Pop\n"
+                     "4. Size\n"
+                     "5. Find\n"
+                     "6. Print\n"
+                     "7. Load from file\n"
+                     "8. Save to file\n"
+                     "0. Back\n";
         std::uint32_t choice{};
         if (!read_choice("Choice: ", choice, 0, 8) || choice == 0)
             return;
@@ -92,7 +100,11 @@ int main()
         while (std::cin)
         {
             std::uint32_t type{};
-            if (!read_choice("\n1. Integers  2. Strings  3. Students  0. Exit: ", type, 0, 3) || type == 0)
+            std::cout << "\n1. Integers\n"
+                         "2. Strings\n"
+                         "3. Students\n"
+                         "0. Exit\n";
+            if (!read_choice("Choice: ", type, 0, 3) || type == 0)
                 break;
             switch (type)
             {
