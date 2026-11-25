@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <title>Практическая работа 8. Вариант 4</title>
+    <script>
+        var days = ["воскресенье", "понедельник", "вторник", "среда", "четверг", "пятница", "суббота"];
+
+        function readNumber(input) {
+            if (input === null || input.trim() === "") return NaN;
+            return Number(input.replace(",", "."));
+        }
+
+        function waterLevel(flow, minutes) {
+            return (flow * minutes / (2 * 2) * 100).toFixed(3).replace(".", ",");
+        }
+
+        function calculate() {
+            var input = prompt("Введите время заполнения в минутах (от 0 до 30):", "30");
+            if (input === null) return;
+
+            var minutes = readNumber(input);
+            if (isNaN(minutes) || minutes < 0 || minutes > 30) {
+                alert("Введите число от 0 до 30.");
+                return;
+            }
+
+            var flow, units;
+            if (confirm("Выберите расход воды:\nОК — 51,7 л/мин\nОтмена — 2 м³/ч")) {
+                flow = 51.7 / 1000;
+                units = "51,7 л/мин";
+            } else {
+                flow = 2 / 60;
+                units = "2 м³/ч";
+            }
+
+            document.getElementById("level").textContent = "Через " + String(minutes).replace(".", ",")
+                + " мин уровень воды составит " + waterLevel(flow, minutes) + " см.";
+            document.getElementById("flow").textContent = "Расход воды " + units;
+
+            var rows = "";
+            for (var time = 0; time <= 30; time += 2) {
+                rows += "<tr><td>" + time + "</td><td>" + waterLevel(flow, time) + "</td></tr>";
+            }
+            document.getElementById("levels").innerHTML = rows;
+            document.getElementById("water").hidden = false;
+        }
+
+        function greetVisitor() {
+            var name = prompt("Введите имя:");
+            if (!name || !name.trim()) return;
+            var patronymic = prompt("Введите отчество:");
+            if (!patronymic || !patronymic.trim()) return;
+            alert("Привет, " + name.trim() + " " + patronymic.trim() + "!\nДобро пожаловать на мою страницу.");
+        }
+
+        function sayHello() {
+            alert("Добро пожаловать на мою страницу!");
+        }
+
+        function showName() {
+            var name = prompt("Введите имя:");
+            if (name !== null) document.getElementById("name").textContent = name;
+        }
+
+        function showNumber() {
+            var input = prompt("Введите число:");
+            if (isFinite(readNumber(input))) alert(input);
+            else alert("Число не введено");
+        }
+
+        function triangleArea() {
+            var base = prompt("Введите длину основания a:");
+            if (base === null) return;
+            var height = prompt("Введите высоту h:");
+            if (height === null) return;
+
+            var a = readNumber(base);
+            var h = readNumber(height);
+            if (!isFinite(a) || !isFinite(h) || !(a > 0 && h > 0)) {
+                alert("Основание и высота должны быть положительными числами.");
+                return;
+            }
+            document.getElementById("area").textContent = "S = a · h / 2 = " + a + " · " + h + " / 2 = " + a * h / 2;
+            document.getElementById("triangle").hidden = false;
+        }
+
+        function askEmail() {
+            if (confirm("У Вас есть e-mail?")) prompt("Введите адрес электронной почты:");
+            else alert("Заведите бесплатный почтовый ящик.");
+        }
+
+        function twoDigits(number) {
+            return number < 10 ? "0" + number : String(number);
+        }
+
+        function greetToday() {
+            var name = prompt("Введите имя:");
+            if (!name || !name.trim()) return;
+            var now = new Date();
+            document.getElementById("greenName").textContent = name.trim().toUpperCase();
+            document.getElementById("today").textContent = "Сегодня " + twoDigits(now.getDate()) + "."
+                + twoDigits(now.getMonth() + 1) + "." + now.getFullYear() + " г., " + days[now.getDay()] + ".";
+            document.getElementById("time").textContent = "Сейчас " + twoDigits(now.getHours()) + ":"
+                + twoDigits(now.getMinutes()) + ":" + twoDigits(now.getSeconds());
+            document.getElementById("greeting").hidden = false;
+        }
+
+        function showDate() {
+            var months = ["января", "февраля", "марта", "апреля", "мая", "июня",
+                "июля", "августа", "сентября", "октября", "ноября", "декабря"];
+            var now = new Date();
+            var day = days[now.getDay()];
+            document.getElementById("date").textContent = day.charAt(0).toUpperCase() + day.slice(1)
+                + ", " + now.getDate() + " " + months[now.getMonth()] + " " + now.getFullYear()
+                + " года " + now.getHours() + " час. " + now.getMinutes() + " мин. " + now.getSeconds() + " сек.";
+        }
+    </script>
+</head>
+<body>
+    <h2>Вариант 4. Уровень воды в баке</h2>
+    <p>Рассчитать уровень воды в баке с размерами 2 × 2 × 2 м с начала его заполнения
+    через каждые 2 минуты в течение получаса, если расход поступающей жидкости
+    51,7 л/мин или 2 м³/ч. Вывести результаты в виде таблицы.</p>
+    <button onclick="calculate()">Рассчитать уровень воды</button>
+    <div id="water" hidden>
+        <p id="level"></p>
+        <table border="1">
+            <caption id="flow"></caption>
+            <thead><tr><th>Время, мин</th><th>Уровень воды, см</th></tr></thead>
+            <tbody id="levels"></tbody>
+        </table>
+    </div>
+
+    <hr>
+    <h2>Внеаудиторная работа</h2>
+    <h3>1. Приветствие по имени и отчеству</h3>
+    <button onclick="greetVisitor()">Ввести имя и отчество</button>
+
+    <hr>
+    <h3>2. Приветствие, имя и число</h3>
+    <button onclick="sayHello()">Приветствие</button>
+    <button onclick="showName()">Ввести имя</button>
+    <button onclick="showNumber()">Ввести число</button>
+    <p id="name"></p>
+
+    <hr>
+    <h3>3. Площадь треугольника</h3>
+    <button onclick="triangleArea()">Рассчитать площадь</button>
+    <div id="triangle" hidden>
+        <svg width="180" height="110" viewBox="0 0 180 110" role="img" aria-label="Треугольник с основанием a и высотой h">
+            <polygon points="10,85 65,10 165,85" fill="none" stroke="black"/>
+            <path d="M65 10 V85" stroke="black" stroke-dasharray="4 3"/>
+            <path d="M65 78 H72 V85" fill="none" stroke="black"/>
+            <text x="73" y="53">h</text>
+            <text x="82" y="102">a</text>
+        </svg>
+        <p id="area"></p>
+    </div>
+
+    <hr>
+    <h3>4. Электронная почта</h3>
+    <button onclick="askEmail()">Ответить на вопрос</button>
+
+    <hr>
+    <h3>5. Приветствие с датой и временем</h3>
+    <button onclick="greetToday()">Ввести имя</button>
+    <p id="greeting" hidden>Привет, <span id="greenName" style="color: green"></span>!<br>
+        <span id="today"></span><br>
+        <span id="time"></span>
+    </p>
+
+    <hr>
+    <h3>6. Текущая дата и время</h3>
+    <button onclick="showDate()">Вывести дату и время</button>
+    <p id="date"></p>
+</body>
+</html>
